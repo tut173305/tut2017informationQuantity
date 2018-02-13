@@ -33,9 +33,9 @@ public class Frequencer implements FrequencerInterface{
       for(int i=0; i< mySpace.length; i++) {
         int s = suffixArray[i];
         for(int j=s;j<mySpace.length;j++) {
-          System.out.write(mySpace[j]);
+          //System.out.write(mySpace[j]);
         }
-        System.out.write('\n');
+        //System.out.write('\n');
       }
     }
   }
@@ -246,9 +246,9 @@ public int subByteFrequency(int start, int end) {
 
   // inspection code
   for(int k=start;k<end;k++) {
-    System.out.write(myTarget[k]);
+    //System.out.write(myTarget[k]);
   }
-  System.out.printf(": first=%d last1=%d\n", first, last1);
+  //System.out.printf(": first=%d last1=%d\n", first, last1);
 
   return last1 - first;
 }
@@ -269,7 +269,7 @@ public static void main(String[] args) {
     frequencerObject = new Frequencer();
 
     frequencerObject.setSpace("Hi Ho Hi Ho".getBytes());
-    frequencerObject.setTarget("o Hi Ho".getBytes());
+    frequencerObject.setTarget(" ".getBytes());
     int result = frequencerObject.frequency();
     System.out.print("Freq = "+ result+" ");
     if(1 == result) { System.out.println("OK"); }
@@ -279,48 +279,3 @@ public static void main(String[] args) {
     System.out.println("STOP"); }
   }
 }
-
-
-/*
-public void setTarget(byte [] target) { myTarget = target;}
-public void setSpace(byte []space) { mySpace = space; }
-public int frequency() {
-int targetLength = myTarget.length;
-int spaceLength = mySpace.length;
-int count = 0;
-if(targetLength == 0){ return -1; }
-for(int start = 0; start<spaceLength; start++) { // Is it OK?
-boolean abort = false;
-for(int i = 0; i<targetLength; i++) {
-
-if(myTarget[i] != mySpace[start+i]) { abort = true; break; }
-}
-if(abort == false) { count++; }
-}
-return count;
-}
-
-// I know that here is a potential problem in the declaration.
-public int subByteFrequency(int start, int length) {
-// Not yet, but it is not currently used by anyone.
-return -1;
-}
-
-public static void main(String[] args) {
-Frequencer myObject;
-int freq;
-try {
-System.out.println("checking my Frequencer");
-myObject = new Frequencer();
-myObject.setSpace("Hi Ho Hi Ho".getBytes());
-myObject.setTarget("H".getBytes());
-freq = myObject.frequency();
-System.out.print("\"H\" in \"Hi Ho Hi Ho\" appears "+freq+" times. ");
-if(4 == freq) { System.out.println("OK"); } else {System.out.println("WRONG"); }
-}
-catch(Exception e) {
-System.out.println("Exception occurred: STOP");
-}
-}
-}
-*/
