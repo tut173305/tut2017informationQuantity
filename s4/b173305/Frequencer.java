@@ -171,14 +171,38 @@ void merge(int[] a1, int[] a2, int[] a)
 private int targetCompare(int i, int start, int end) {
   // comparing suffix_i and target_start_end by dictonary order with limitation of length;
   //suffix_iとtarget_start_endを辞書順で長さの制限付きで比較する
-  int si = suffixArray[i];
-  int se = end - start ;
-  if(se > mySpace.length - si) return -1;
-  int n = se;
-  for(int k=0;k<n;k++) {
-    if(mySpace[si+k]>myTarget[start+k]) return 1;
-    if(mySpace[si+k]<myTarget[start+k]) return -1;
+
+
+  if(i < 0){
+    return -1;
+  }else if(i > mySpace.length -1){
+    return 1;
   }
+
+
+  int si = suffixArray[i];
+  int s = 0;
+  if(si > s) s = si;
+  int n = mySpace.length - si;
+
+
+
+  if(n > end - start) n = end - start;
+
+  for(int k=0;k<n;k++) {
+    if(mySpace[si+k]>myTarget[start+k]){
+      return 1;
+    }
+    if(mySpace[si+k]<myTarget[start+k]){
+      return -1;
+    }
+  }
+
+
+  if(n < end - start) {
+    return -1;
+  }
+
   // if the beginning of suffix_i matches target_i_end, and suffix is longer than target it returns 0;
   //suffix_iの先頭がtarget_start_endと一致し、suffixがtargetよりも長い場合は0を返します。
 
@@ -206,12 +230,38 @@ private int subByteStartIndex(int start, int end) {
   // not implemented yet;
   // For "Ho", it will return 5 for "Hi Ho Hi Ho".
   // For "Ho ", it will return 6 for "Hi Ho Hi Ho".
-  for(int i = 0; i < mySpace.length; i++){
-    if(targetCompare(i,start,end) == 0){
-      return i;
+
+  int pLeft = 0;
+  int pRight = mySpace.length - 1;
+
+  do {
+    int center = (pLeft + pRight) / 2;
+
+
+    if (targetCompare(center,start,end) == 0 && targetCompare(center-1,start,end) == -1) {
+
+      return center;
+    } else if (targetCompare(center,start,end) == -1){
+
+      pLeft = center + 1;
+
+      //真ん中の一つ右側を左端とする
+    } else {
+      pRight = center - 1;
+
+
     }
-  }
-  return suffixArray.length;
+  } while (pLeft <= pRight);
+
+
+  /*
+  for(int i = 0; i < mySpace.length; i++){
+  if(targetCompare(i,start,end) == 0){
+  return i;
+}
+}
+*/
+return suffixArray.length;
 }
 
 private int subByteEndIndex(int start, int end) {
@@ -220,15 +270,42 @@ private int subByteEndIndex(int start, int end) {
   // not implemented yet
   // For "Ho", it will return 7 for "Hi Ho Hi Ho".
   // For "Ho ", it will return 7 for "Hi Ho Hi Ho".
-  for(int i = 0; i < mySpace.length - 1; i++){
-    if(targetCompare(i,start,end) == 0 && targetCompare(i+1,start,end) != 0){
-      return i+1;
+
+
+  int pLeft = 0;
+  int pRight = mySpace.length - 1;
+
+  do {
+    int center = (pLeft + pRight) / 2;
+
+    if (targetCompare(center,start,end) == 1 && targetCompare(center-1,start,end) == 0) {
+      return center;
+    } else if (targetCompare(center,start,end) == 1){
+
+      pRight = center - 1;
+
+      //真ん中の一つ右側を左端とする
+    } else {
+
+      pLeft = center + 1;
     }
-  }
-  return suffixArray.length;
+
+
+
+  } while (pLeft <= pRight);
+
+  /*
+  for(int i = 0; i < mySpace.length - 1; i++){
+  if(targetCompare(i,start,end) == 0 && targetCompare(i+1,start,end) != 0){
+  return i+1;
+}
+}
+*/
+return suffixArray.length;
 }
 
 public int subByteFrequency(int start, int end) {
+
   //This method could be defined as follows though it is slow.
   int spaceLength = mySpace.length;
   int count = 0;
@@ -243,13 +320,13 @@ public int subByteFrequency(int start, int end) {
   int first = subByteStartIndex(start,end);
   int last1 = subByteEndIndex(start, end);
 
-
+/*
   // inspection code
   for(int k=start;k<end;k++) {
     //System.out.write(myTarget[k]);
   }
   //System.out.printf(": first=%d last1=%d\n", first, last1);
-
+*/
   return last1 - first;
 }
 
@@ -269,10 +346,10 @@ public static void main(String[] args) {
     frequencerObject = new Frequencer();
 
     frequencerObject.setSpace("Hi Ho Hi Ho".getBytes());
-    frequencerObject.setTarget(" ".getBytes());
+    frequencerObject.setTarget("H".getBytes());
     int result = frequencerObject.frequency();
     System.out.print("Freq = "+ result+" ");
-    if(1 == result) { System.out.println("OK"); }
+    if(4 == result) { System.out.println("OK"); }
     else {System.out.println("WRONG"); }
   }
   catch(Exception e) {
