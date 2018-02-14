@@ -30,7 +30,7 @@ public class InformationEstimator implements InformationEstimatorInterface{
 	// It is not implement in class library because internal structure of byte[] requires copy.
 	byte [] result = new byte[end - start];
 	for(int i = 0; i<end - start; i++) { result[i] = x[start + i]; };
-	return resultt;
+	return result;
     }
 
     */
